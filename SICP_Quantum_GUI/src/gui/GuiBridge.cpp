@@ -1,6 +1,16 @@
 #include "GuiBridge.hpp"
 
+void GuiBridge::init()
+{
+    // Inicialización GUI (ImGui vendrá aquí)
+}
+
 void GuiBridge::sync()
 {
-    // Sincronización GUI ↔ núcleo
+    // Estado cuántico → interfaz
+}
+
+void GuiBridge::shutdown()
+{
+    // Limpieza GUI
 }

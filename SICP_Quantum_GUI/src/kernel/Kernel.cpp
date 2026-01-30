@@ -5,16 +5,30 @@
 #include "render/Renderer.hpp"
 #include "gui/GuiBridge.hpp"
 
-void Kernel::init() {}
-void Kernel::start() {}
+void Kernel::init()
+{
+    // Inicialización del núcleo SICP
+}
+
+void Kernel::start()
+{
+    // Arranque de subsistemas
+    GuiBridge::init();
+}
 
 void Kernel::tick()
 {
-    QuantumState::evolve();
-    NeuroInterface::sample();
-    Visualizer::map();
-    Renderer::draw();
-    GuiBridge::sync();
+    // Ciclo principal del sistema
+
+    QuantumState::evolve();     // Evolución cuántica
+    NeuroInterface::sample();   // Captura neuroeléctrica
+    Visualizer::map();          // Mapeo estado → visual
+    Renderer::draw();           // Renderizado
+    GuiBridge::sync();          // Sincronización GUI
 }
 
-void Kernel::shutdown() {}
+void Kernel::shutdown()
+{
+    // Apagado ordenado del sistema
+    GuiBridge::shutdown();
+}

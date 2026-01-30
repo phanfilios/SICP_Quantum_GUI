@@ -1,20 +1,28 @@
-cmake
+cmake_minimum_required(VERSION 3.20)
 
-cmake_minimum-required(version 3.16)
+project(SICP_Quantum_GUI LANGUAGES CXX)
 
-project(SCIP-Quantum_GUI LANGUAGES CXX)
-
-set(CMAKE-CXX-STANDARD 17)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(
-    src
+# Ejecutable principal
+
+add_executable(SICP_Quantum_GUI
+    main.cpp
+
+    app/Application.cpp
+    kernel/Kernel.cpp
+
+    quantum/QuantumState.cpp
+    neuro/NeuroInterface.cpp
+
+    visual/Visualizer.cpp
+    render/Renderer.cpp
+    gui/GuiBridge.cpp
 )
 
-# Archivos fuente
+# Includes globales
 
-file(GLOB_RECURSE SOURCES
-    src/*.cpp
+target_include_directories(SICP_Quantum_GUI PRIVATE
+    ${PROJECT_SOURCE_DIR}
 )
-
-add_executable(SICP_Quantum_GUI ${SOURCES})
