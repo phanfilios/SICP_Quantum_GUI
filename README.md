@@ -5,3 +5,7 @@ the project internet quantum will remain in effect
 update 23:08 hours 29/01/2026
 
 An attempt was made to improve the code, especially the graphical section; there are problems in the JSON that are not resolved, so there is more work to do.
+
+update 14:05 31/01/2026 
+
+you men cummennnnnnnnnnnn thas rigt xd
