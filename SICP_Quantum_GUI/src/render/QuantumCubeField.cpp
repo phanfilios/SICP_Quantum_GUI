@@ -1,29 +1,46 @@
 #include "render/QuantumCubeField.hpp"
-#include "opengl/gl_compat.hpp"
-
 #include <cstdlib>
 #include <cmath>
 
-static std::vector<QuantumCube> cubes;
+std::vector<QuantumCube> QuantumCubeField::s_cubes;
 
-void QuantumCubeField::init()
+void QuantumCubeField::init(unsigned int cubeCount)
 {
-    const int count = 64;
+    s_cubes.clear();
+    s_cubes.reserve(cubeCount);
 
-    cubes.clear();
-    for (int i = 0; i < count; ++i)
+    for (unsigned int i = 0; i < cubeCount; ++i)
     {
-        QuantumCube c;
-        c.x = (rand() % 100 - 50) / 10.0f;
-        c.y = (rand() % 100 - 50) / 10.0f;
-        c.z = -(rand() % 100) / 10.0f;
-        c.size = (rand() % 10 + 5) / 100.0f;
-        c.phase = (rand() % 100) / 10.0f;
-        c.speed = (rand() % 10 + 1) / 500.0f;
-        cubes.push_back(c);
+        QuantumCube cube;
+
+        cube.x = (std::rand() % 200 - 100) / 10.0f;
+        cube.y = (std::rand() % 200 - 100) / 10.0f;
+        cube.z = (std::rand() % 200 - 100) / 10.0f;
+
+        cube.rotation = static_cast<float>(std::rand() % 360);
+        cube.energy = 0.0f;
+
+        s_cubes.push_back(cube);
     }
 }
 
+void QuantumCubeField::update(float quantumEnergy)
+{
+    if (quantumEnergy < 0.0f) quantumEnergy = 0.0f;
+    if (quantumEnergy > 1.0f) quantumEnergy = 1.0f;
+
+    for (auto& cube : s_cubes)
+    {
+        cube.energy = quantumEnergy;
+        cube.rotation += 0.2f + quantumEnergy;
+        cube.y += std::sin(cube.rotation * 0.01f) * 0.002f;
+    }
+}
+
+const std::vector<QuantumCube>& QuantumCubeField::cubes()
+{
+    return s_cubes;
+}
 void QuantumCubeField::update(float coherence)
 {
     for (auto& c : cubes)
