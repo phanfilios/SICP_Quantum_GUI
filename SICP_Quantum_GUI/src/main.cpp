@@ -7,19 +7,17 @@
 
 #include "kernel/Kernel.hpp"
 
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+static void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
 }
-
 
 int main()
 {
 
     if (!glfwInit())
     {
-        std::cerr << "❌ Error: GLFW init failed\n";
+        std::cerr << "[SICP] Error: GLFW no pudo inicializarse\n";
         return -1;
     }
 
@@ -42,7 +40,7 @@ int main()
 
     if (!window)
     {
-        std::cerr << "❌ Error: Window creation failed\n";
+        std::cerr << "[SICP] Error: No se pudo crear la ventana\n";
         glfwTerminate();
         return -1;
     }
@@ -50,16 +48,13 @@ int main()
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
-        std::cerr << "❌ Error: GLAD init failed\n";
+        std::cerr << "[SICP] Error: GLAD no pudo cargarse\n";
         return -1;
     }
 
-
     glEnable(GL_DEPTH_TEST);
-    glClearColor(0.02f, 0.02f, 0.05f, 1.0f);
 
 
     Kernel::init();
@@ -68,15 +63,16 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+        glfwPollEvents();
 
         Kernel::tick();
 
         glfwSwapBuffers(window);
-        glfwPollEvents();
     }
 
 
     Kernel::shutdown();
+
     glfwDestroyWindow(window);
     glfwTerminate();
 
