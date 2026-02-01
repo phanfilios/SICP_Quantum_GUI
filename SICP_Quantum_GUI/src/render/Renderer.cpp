@@ -10,28 +10,26 @@
 Shader* Renderer::s_shader = nullptr;
 Camera  Renderer::s_camera;
 
-// ─────────────────────────────────────────────
-// Helper: cubo wireframe estilo PS2
-// ─────────────────────────────────────────────
+
 static void drawWireCube(float size)
 {
     float s = size * 0.5f;
 
     glBegin(GL_LINES);
 
-    // base
+
     glVertex3f(-s, -s, -s); glVertex3f( s, -s, -s);
     glVertex3f( s, -s, -s); glVertex3f( s, -s,  s);
     glVertex3f( s, -s,  s); glVertex3f(-s, -s,  s);
     glVertex3f(-s, -s,  s); glVertex3f(-s, -s, -s);
 
-    // top
+
     glVertex3f(-s,  s, -s); glVertex3f( s,  s, -s);
     glVertex3f( s,  s, -s); glVertex3f( s,  s,  s);
     glVertex3f( s,  s,  s); glVertex3f(-s,  s,  s);
     glVertex3f(-s,  s,  s); glVertex3f(-s,  s, -s);
 
-    // verticals
+
     glVertex3f(-s, -s, -s); glVertex3f(-s,  s, -s);
     glVertex3f( s, -s, -s); glVertex3f( s,  s, -s);
     glVertex3f( s, -s,  s); glVertex3f( s,  s,  s);
@@ -58,7 +56,7 @@ void Renderer::init()
 // ─────────────────────────────────────────────
 void Renderer::draw()
 {
-    // Centro del campo cuántico
+
     float cx, cy, cz;
     QuantumCubeField::computeCenter(cx, cy, cz);
 
@@ -71,22 +69,20 @@ void Renderer::draw()
         desiredTarget
     );
 
-    // Limpieza
+
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Cámara
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(glm::value_ptr(s_camera.getViewMatrix()));
 
-    // Shader (solo uniforms por ahora)
     if (s_shader)
     {
         s_shader->use();
-        s_shader->setFloat("u_time", 0.0f); // luego lo conectamos al reloj
+        s_shader->setFloat("u_time", 0.0f); 
         s_shader->setVec2("u_resolution", glm::vec2(1280, 720));
     }
 
-    // Cubos
+
     const auto& cubes = QuantumCubeField::cubes();
 
     for (const auto& cube : cubes)

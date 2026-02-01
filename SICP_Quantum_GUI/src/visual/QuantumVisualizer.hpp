@@ -1,13 +1,17 @@
 #pragma once
 
-struct QuantumVisualState {
-    float coherence;
-    float phase;
-    float entropy;
-};
-
-class Visualizer {
+class Visualizer
+{
 public:
-    static QuantumVisualState current();
-    static void map();
+    static void init();
+    static void map(float energy);
+
+    static float intensity();
+    static float motion();
+    static float glow();
+
+private:
+    static float s_intensity;
+    static float s_motion;
+    static float s_glow;
 };

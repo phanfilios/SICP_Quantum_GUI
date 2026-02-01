@@ -8,16 +8,15 @@ class Camera;
 class Renderer
 {
 public:
-    // Inicializa recursos gráficos (shader, estados OpenGL)
-    static void init();
 
-    // Dibuja un frame completo
+    static void init();
     static void draw();
+    static void shutdown();
 
 private:
-    // Shader activo (fondo + color base)
-    static Shader* s_shader;
 
-    // Cámara global del render
-    static Camera s_camera;
+    static Shader* s_shader;
+    static Camera* s_camera;
+
+    Renderer() = delete;
 };

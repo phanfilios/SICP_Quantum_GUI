@@ -2,32 +2,16 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+
 #include <GL/gl.h>
-#include <glm/gtc/type_ptr.hpp>
 
-static std::string loadFile(const char* path)
-{
-    std::ifstream file(path);
-    std::stringstream ss;
-    ss << file.rdbuf();
-    return ss.str();
-}
-
-Shader::Shader(const char* vPath, const char* fPath)
+Shader::Shader(const std::string& vPath, const std::string& fPath)
 {
     std::string vCode = loadFile(vPath);
     std::string fCode = loadFile(fPath);
 
-    const char* vSrc = vCode.c_str();
-    const char* fSrc = fCode.c_str();
-
-    unsigned int vs = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vs, 1, &vSrc, nullptr);
-    glCompileShader(vs);
-
-    unsigned int fs = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fs, 1, &fSrc, nullptr);
-    glCompileShader(fs);
+    unsigned int vs = compile(GL_VERTEX_SHADER, vCode);
+    unsigned int fs = compile(GL_FRAGMENT_SHADER, fCode);
 
     m_id = glCreateProgram();
     glAttachShader(m_id, vs);
@@ -43,17 +27,37 @@ void Shader::use() const
     glUseProgram(m_id);
 }
 
-void Shader::setFloat(const std::string& n, float v) const
+void Shader::setFloat(const std::string& name, float v) const
 {
-    glUniform1f(glGetUniformLocation(m_id, n.c_str()), v);
+    glUniform1f(glGetUniformLocation(m_id, name.c_str()), v);
 }
 
-void Shader::setVec2(const std::string& n, const glm::vec2& v) const
+void Shader::setVec2(const std::string& name, const glm::vec2& v) const
 {
-    glUniform2fv(glGetUniformLocation(m_id, n.c_str()), 1, glm::value_ptr(v));
+    glUniform2f(glGetUniformLocation(m_id, name.c_str()), v.x, v.y);
 }
 
-void Shader::setMat4(const std::string& n, const glm::mat4& m) const
+void Shader::setMat4(const std::string& name, const glm::mat4& m) const
 {
-    glUniformMatrix4fv(glGetUniformLocation(m_id, n.c_str()), 1, GL_FALSE, glm::value_ptr(m));
+    glUniformMatrix4fv(
+        glGetUniformLocation(m_id, name.c_str()),
+        1, GL_FALSE, &m[0][0]
+    );
+}
+
+std::string Shader::loadFile(const std::string& path)
+{
+    std::ifstream file(path);
+    std::stringstream ss;
+    ss << file.rdbuf();
+    return ss.str();
+}
+
+unsigned int Shader::compile(unsigned int type, const std::string& src)
+{
+    unsigned int id = glCreateShader(type);
+    const char* c = src.c_str();
+    glShaderSource(id, 1, &c, nullptr);
+    glCompileShader(id);
+    return id;
 }

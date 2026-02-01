@@ -1,34 +1,51 @@
 #include "Kernel.hpp"
+
 #include "quantum/QuantumState.hpp"
 #include "neuro/NeuroInterface.hpp"
 #include "visual/Visualizer.hpp"
 #include "render/Renderer.hpp"
+#include "render/QuantumCubeField.hpp"
 #include "gui/GuiBridge.hpp"
 
 void Kernel::init()
 {
-    // Inicialización del núcleo SICP
-}
 
-void Kernel::start()
-{
-    // Arranque de subsistemas
+    QuantumState::init();
+    NeuroInterface::init();
+    Visualizer::init();
+    QuantumCubeField::init(250); 
+    Renderer::init();
     GuiBridge::init();
 }
 
 void Kernel::tick()
 {
-    // Ciclo principal del sistema
 
-    QuantumState::evolve();     // Evolución cuántica
-    NeuroInterface::sample();   // Captura neuroeléctrica
-    Visualizer::map();          // Mapeo estado → visual
-    Renderer::draw();           // Renderizado
-    GuiBridge::sync();          // Sincronización GUI
+    QuantumState::evolve();
+
+
+    NeuroInterface::sample();
+
+
+    float energy = QuantumState::coherence();
+
+
+    QuantumCubeField::update(energy);
+    Visualizer::map(energy);
+
+
+    Renderer::draw();
+
+
+    GuiBridge::sync();
 }
 
 void Kernel::shutdown()
 {
-    // Apagado ordenado del sistema
+
     GuiBridge::shutdown();
+    Renderer::shutdown();
+    Visualizer::shutdown();
+    NeuroInterface::shutdown();
+    QuantumState::shutdown();
 }
